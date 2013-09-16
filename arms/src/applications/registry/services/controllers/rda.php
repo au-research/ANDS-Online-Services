@@ -394,8 +394,6 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 
 	public function getAncestryGraph()
 	{
-		$collections_only = true;
-
 		$this->load->model('connectiontree');
 		$this->load->model('registry_object/registry_objects','ro');
 
@@ -422,10 +420,9 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		// Loop through to get all immediate ancestors and build their trees
 		$trees = array();
 		$ancestors = $this->connectiontree->getImmediateAncestors($this_registry_object, $published_only);
-		// var_dump($ancestors);
+
 		if ($ancestors)
 		{
-			$unique_ancestors = array();
 			foreach ($ancestors AS $ancestor_element)
 			{
 				if($this_registry_object->id != $ancestor_element['registry_object_id']){
@@ -433,10 +430,9 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 					$root_registry_object = $this->ro->getByID($root_element_id->id);
 
 					// Only generate the tree if this is a unique ancestor
-					if (!isset($unique_ancestors[$root_registry_object->id]))
+					if (!isset($this->connectiontree->recursed_children[$root_registry_object->id]))
 					{
-						$unique_ancestors[$root_registry_object->id] = true;
-						$trees[] = $this->connectiontree->get($root_registry_object, $depth, $published_only);
+						$trees[] = $this->connectiontree->get($root_registry_object, $depth, $published_only, $this_registry_object->id);
 					}
 				}
 			}
@@ -446,56 +442,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 			$trees[] = $this->connectiontree->get($this_registry_object, $depth, $published_only);
 		}
 
-		// XXX: Option to cleanup & format
-		if ($collections_only)
-		{
-			foreach ($trees AS &$tree)
-			{
-				if ($tree['class'] != "collection")
-				{
-					$tree = null;
-				}
-				else
-				{
-					$this->_removeNonCollections($tree);
-				}
-			}
-		}
-
-		// Call _array_values_recursive to strip the automatically created array indexes when using unset()
-		echo json_encode(array("status"=>"success", "trees"=>$this->_array_values_recursive($trees)));
-	}
-
-	// Remove any associative numeric indexes from the array
-	private function _array_values_recursive($array) {
-	    $temp = array();
-	    foreach ($array as $key => $value) {
-	        if (is_numeric($key)) {
-	            $temp[] = is_array($value) ? $this->_array_values_recursive($value) : $value;
-	        } else {
-	            $temp[$key] = is_array($value) ? $this->_array_values_recursive($value) : $value;
-	        }
-	    }
-	    return $temp;
-	}
-
-	// Unset any children nodes that are not collections
-	// N.B. need to use array_values on the result as unset in a foreach loop will create numeric indexes on remaining elts
-	private function _removeNonCollections(&$tree_node)
-	{
-		if (!isset($tree_node['children'])) return;
-
-		foreach($tree_node['children'] AS $id => &$child)
-		{
-			if ($child['class'] != "collection")
-			{
-				unset($tree_node['children'][$id]);
-			}
-			else
-			{
-				$this->_removeNonCollections($child);
-			}
-		}
+		echo json_encode(array("status"=>"success", "trees"=>$trees));
 	}
 
 
