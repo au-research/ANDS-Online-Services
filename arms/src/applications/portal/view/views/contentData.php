@@ -12,7 +12,7 @@
 
 							$url = base_url() . "search/#!/tab=".$content."/group=".$contentData['contents']['contributor'] ;
 					
-							$contentDiv .= "<p><a href='".$url."'>".$value . " " . ucfirst($content)."</a></p>";	
+							$contentDiv .= "<p><a href='".$url."'>".$value . " " . readable($content, ($value != 1)) . "</a></p>";	
 
 		}
 	}
