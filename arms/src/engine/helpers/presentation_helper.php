@@ -74,7 +74,7 @@ function curl_post($url, $post, $header=false)
 }
 
 
-function curl_file_get_contents($URL, $header)
+function curl_file_get_contents($URL, $header=null)
 {
     $c = curl_init();
     if(!$header){
