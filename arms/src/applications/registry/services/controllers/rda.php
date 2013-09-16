@@ -394,6 +394,8 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 
 	public function getAncestryGraph()
 	{
+		$collections_only = true;
+
 		$this->load->model('connectiontree');
 		$this->load->model('registry_object/registry_objects','ro');
 
@@ -426,7 +428,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 			$unique_ancestors = array();
 			foreach ($ancestors AS $ancestor_element)
 			{
-				if($this_registry_object->id!=$ancestor_element['registry_object_id']){
+				if($this_registry_object->id != $ancestor_element['registry_object_id']){
 					$root_element_id = $this->connectiontree->getRootAncestor($this->ro->getByID($ancestor_element['registry_object_id']), $published_only);
 					$root_registry_object = $this->ro->getByID($root_element_id->id);
 
@@ -445,8 +447,57 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		}
 
 		// XXX: Option to cleanup & format
-		echo json_encode(array("status"=>"success", "trees"=>$trees));
+		if ($collections_only)
+		{
+			foreach ($trees AS &$tree)
+			{
+				if ($tree['class'] != "collection")
+				{
+					$tree = null;
+				}
+				else
+				{
+					$this->_removeNonCollections($tree);
+				}
+			}
+		}
+
+		// Call _array_values_recursive to strip the automatically created array indexes when using unset()
+		echo json_encode(array("status"=>"success", "trees"=>$this->_array_values_recursive($trees)));
 	}
+
+	// Remove any associative numeric indexes from the array
+	private function _array_values_recursive($array) {
+	    $temp = array();
+	    foreach ($array as $key => $value) {
+	        if (is_numeric($key)) {
+	            $temp[] = is_array($value) ? $this->_array_values_recursive($value) : $value;
+	        } else {
+	            $temp[$key] = is_array($value) ? $this->_array_values_recursive($value) : $value;
+	        }
+	    }
+	    return $temp;
+	}
+
+	// Unset any children nodes that are not collections
+	// N.B. need to use array_values on the result as unset in a foreach loop will create numeric indexes on remaining elts
+	private function _removeNonCollections(&$tree_node)
+	{
+		if (!isset($tree_node['children'])) return;
+
+		foreach($tree_node['children'] AS $id => &$child)
+		{
+			if ($child['class'] != "collection")
+			{
+				unset($tree_node['children'][$id]);
+			}
+			else
+			{
+				$this->_removeNonCollections($child);
+			}
+		}
+	}
+
 
 	public function getContributorPage()
 	{
