@@ -152,9 +152,9 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		$connections = array();
 
 		// Some validation on input
-		if (! $this->input->get('slug') && ! $this->input->get('registry_object_id'))
+		if (!($this->input->get('slug') || $this->input->get('registry_object_id') || $this->input->get('registry_object_key')))
 		{ 
-			throw new Exception("Invalid URL SLUG or registry_object_id specified.");
+			throw new Exception("Invalid URL SLUG, registry_object_id or registry_object_key specified.");
 		}
 
 		// Some filter variables
@@ -173,6 +173,9 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		{
 			$registry_object = $this->ro->getByID($this->input->get('registry_object_id'));
 			$published_only = FALSE;
+		}elseif ($this->input->get('registry_object_key')){
+			$registry_object = $this->ro->getPublishedByKey(urldecode($this->input->get('registry_object_key')));
+			$published_only = TRUE;
 		}
 
 		if (!$registry_object)

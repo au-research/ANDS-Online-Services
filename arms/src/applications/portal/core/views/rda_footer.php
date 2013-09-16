@@ -120,7 +120,11 @@
 		    <?php if ($lib=='angular'): ?>
 		    	<script type="text/javascript" src="<?php echo asset_url('lib/angular.min.js', 'base') ?>"></script>
 		    <?php endif; ?>
-		<?php endforeach;?>
+			<?php if($lib=='colorbox'):?>
+	            <link href="<?php echo asset_url('lib/colorbox/colorbox.css', 'base');?>" rel="stylesheet" type="text/css">
+	            <script src="<?php echo asset_url('lib/colorbox/jquery.colorbox-min.js', 'base');?>" type="text/javascript"></script>
+	        <?php endif; ?>
+			<?php endforeach;?>
 	<?php endif; ?>
 
 	<script type="text/javascript" src="<?php echo asset_url('js/script.js', 'core');?>"></script>

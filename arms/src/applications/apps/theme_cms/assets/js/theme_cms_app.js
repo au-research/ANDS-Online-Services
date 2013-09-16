@@ -41,6 +41,12 @@ angular.module('theme_cms_app', ['slugifier', 'ui.sortable', 'ui.tinymce', 'ngSa
 					return response.data;
 				});
 				return promise;
+			},
+			getConnections: function(key){
+				var promise = $http.get(real_base_url+'registry/services/rda/getConnections/?registry_object_key='+encodeURIComponent(key)).then(function(response){
+					return response.data;
+				});
+				return promise;
 			}
 		}
 	}).
@@ -53,6 +59,36 @@ angular.module('theme_cms_app', ['slugifier', 'ui.sortable', 'ui.tinymce', 'ngSa
 				}
 			}
 			return res;
+		}
+	}).
+	filter('relationships_display', function($filter){
+		return function(text, type){
+			var res = '';
+			if(text && text[type]){
+				var s = (text[type]);
+				res += '<h4>'+$filter('class_name')(type)+'</h4>';
+				res +='<ul>';
+				$.each(s, function(i, k){
+					res += '<li><a href="'+real_base_url+''+k['slug']+'">'+k['title']+' <small class="muted">'+k['relation_type']+'</small></a></li>';
+				});
+				res +='</ul>';
+				if(text[type+'_count']>5){
+					res += 'Total Count: '+text[type+'_count'];
+				}
+			}
+			return res;
+		}
+	}).
+	filter('class_name', function(){
+		return function(text){
+			switch(text){
+				case 'collection': return 'Collections';break;
+				case 'activity': return 'Activities';break;
+				case 'party_one': return 'Researchers';break;
+				case 'party_multi': return 'Research Groups';break;
+				case 'service': return 'Services';break;
+				default: return text;break;
+			}
 		}
 	}).
 	config(function($routeProvider){
@@ -70,11 +106,17 @@ angular.module('theme_cms_app', ['slugifier', 'ui.sortable', 'ui.tinymce', 'ngSa
 				template:$('#view_page_template').html()
 			})
 	}).
-	directive('roSearch', function(){
+	directive('roSearch', function($compile){
 		return {
 			restrict : 'A',
 			link: function(scope, element){
-				$(element).ro_search_widget();
+				$(element).ro_search_widget().on('selected.rosearch.ands', function(e, ro){
+					if(scope.ro){
+						scope.ro.key = ro.key;
+					}else if(scope.c){
+						scope.c.relation.key = ro.key;
+					}
+				});
 			}
 		}
 	}).
@@ -109,10 +151,19 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 		$scope.page.right = $scope.page.right || [];
 		$scope.search_result = {};
 		$scope.available_search = [];
-		$scope.boosted_key = [];
+		$scope.relationships = [];
 		$($scope.page.left).each(function(){
 			if(this.type=='search'){
 				$scope.preview_search(this);
+			}else if(this.type=='relation'){
+				$scope.preview_relation(this);
+			}
+		});
+		$($scope.page.right).each(function(){
+			if(this.type=='search'){
+				$scope.preview_search(this);
+			}else if(this.type=='relation'){
+				$scope.preview_relation(this);
 			}
 		});
 		$scope.available_facets = [
@@ -120,6 +171,13 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 			{type:'group', name:'Research Groups'},
 			{type:'license_class', name:'Licences'}
 		];
+		$scope.available_relation_class = [
+			{type:'collection', name:'Collections'},
+			{type:'party_one', name:'Researchers'},
+			{type:'party_multi', name:'Research Groups'},
+			{type:'activity', name:'Activities'},
+			{type:'service', name:'Services'}
+		]
 	});
 	$scope.addContent = function(region){
 		var blob = {'title':'New Content', 'type':'html', 'content':''};
@@ -208,6 +266,14 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 						$scope.available_search.push({search_id:key.search_id, name:key.name});
 					});
 				});
+			});
+		}
+	}
+
+	$scope.preview_relation= function(c){
+		if(c.relation){
+			search_factory.getConnections(c.relation.key).then(function(data){
+				$scope.relationships[c.relation.key] = data.connections[0];
 			});
 		}
 	}

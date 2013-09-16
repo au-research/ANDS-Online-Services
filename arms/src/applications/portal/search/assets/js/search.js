@@ -53,6 +53,13 @@ $(document).ready(function() {
 						delete searchData['tab'];
 						refreshSearch = true;
 						break;
+					case 'boost_key':
+						var bq = searchData['boost_key'].split(",");
+						searchData['boost_key'] = [];
+						$.each(bq, function(i,k){
+							searchData['boost_key'].push(k);
+						});
+						break;
 				}
 				// If there is a search specified (being on the map page doesn't count!), show the cancel search button
 				if (term != "map"){

@@ -9,7 +9,7 @@ class Theme_page extends MX_Controller {
 	function view($slug){
 		$data['page'] = json_decode($this->fetch_theme_page_by_slug($slug), true);
 		$data['scripts'] = array('portal_theme');
-		$data['js_lib'] = array('angular');
+		$data['js_lib'] = array('angular', 'colorbox');
 		$this->load->view('theme_page_index', $data);
 	}
 

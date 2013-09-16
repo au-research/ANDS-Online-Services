@@ -15,12 +15,12 @@
 					<?php echo $f['content']; ?>
 				<?php endif; ?>
 
+				<?php if($f['type']=='separator'): ?><hr/><?php endif; ?>
+
 				<?php if($f['type']=='gallery'): ?>
-					<ul>
 						<?php foreach($f['gallery'] as $i): ?>
-						<li><img src="<?php echo $i['src'];?>" alt=""></li>
+						<a colorbox href="<?php echo $i['src']; ?>" rel="<?php echo $f['title'] ?>"><img src="<?php echo $i['src']; ?>" alt="" style="width:100px;" rel="<?php echo $f['title']; ?>"></a>
 						<?php endforeach; ?>
-					</ul>
 				<?php endif; ?>
 
 				<?php if($f['type']=='search'): ?>
@@ -43,17 +43,17 @@
 					<p><?php echo $f['content']; ?></p>
 				<?php endif; ?>
 
+				<?php if($f['type']=='separator'): ?><hr/><?php endif; ?>
+
 				<?php if($f['type']=='facet'): ?>
 					<h2><?php echo $f['title']; ?></h2>
 					<div class="theme_facet" search-id="<?php echo $f['facet']['search_id'] ?>" facet-type="<?php echo $f['facet']['type'] ?>"></div>
 				<?php endif; ?>
 
 				<?php if($f['type']=='gallery'): ?>
-					<ul>
-						<?php foreach($f['gallery'] as $i): ?>
-						<li><img src="<?php echo $i['src'];?>" alt=""></li>
-						<?php endforeach; ?>
-					</ul>
+					<?php foreach($f['gallery'] as $i): ?>
+					<a colorbox href="<?php echo $i['src']; ?>" rel="<?php echo $f['title'] ?>"><img src="<?php echo $i['src']; ?>" alt="" style="width:100px;" rel="<?php echo $f['title']; ?>"></a>
+					<?php endforeach; ?>
 				<?php endif; ?>
 			</div>
 		<?php endforeach; ?>
@@ -63,6 +63,12 @@
 
 <script type="text/x-mustache" id="search-result-template">
 {{#has_result}}
+	<div class="tabs">
+		<a href="<?php echo portal_url('search'); ?>#!/{{filter_query}}">All</a>
+		{{#tabs}}
+			<a href="<?php echo portal_url('search'); ?>#!/{{filter_query}}class={{inc_title}}" {{#current}}class="current"{{/current}}>{{title}}</a>
+		{{/tabs}}
+	</div>
 	{{#result.docs}}
 		<div class="post clear" ro_id="{{id}}">
 			{{#contributor_page}}
@@ -84,7 +90,7 @@
 		    {{/description}}
 		</div>
 	{{/result.docs}}
-	<a href="" ng-click="search-link()">View Full Search</a>
+	<a href="<?php echo portal_url('search');?>#!/{{filter_query}}">View Full Search</a>
 {{/has_result}}
 </script>
 
@@ -93,7 +99,7 @@
 	<h3 class="widget_title">{{label}}</h3>
 	<ul>
 		{{#values}}
-			<li><a href="javascript:;" class="filter" filter_type="{{facet_type}}" filter_value="{{title}}">{{title}} ({{count}})</a></li>
+			<li><a href="<?php echo portal_url('search');?>#!/{{filter_query}}{{facet_type}}={{inc_title}}" class="filter" filter_type="{{facet_type}}" filter_value="{{title}}">{{title}} ({{count}})</a></li>
 		{{/values}}
 	</ul>
 </div>

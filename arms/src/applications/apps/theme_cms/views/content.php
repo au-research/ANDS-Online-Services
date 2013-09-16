@@ -37,6 +37,10 @@
 
 						<div ng-show="c.type=='facet'" ng-bind-html="search_result[c.facet.search_id].data.facet.facet_fields[c.facet.type] | facet_display"></div>
 
+						<div ng-show="c.type=='relation'">
+							<div ng-show="relationships[c.relation.key]" ng-bind-html="relationships[c.relation.key] | relationships_display:c.relation.type"></div>
+						</div>
+
 						<hr/>
 						<a href="" ng-click="edit(c)" class="btn">Edit</a>
 						<a href="" ng-click="delete_blob('<?php echo $region; ?>', $index)" class="btn btn-danger"><i class="icon-white icon-trash"></i></a>
@@ -138,12 +142,18 @@
 
 							<div ng-show="c.type == 'relation'">
 								<form action="">
-									<div class="alert alert-info" ng-show="boosted_key">Boosted Keys are found in your search.</div>
-									<div class="input-prepend input-append" ng-repeat="ro in boosted_key">
+									<div class="alert alert-info">Input the key to display related objects from</div>
+									<div class="input-prepend input-append">
 										<span class="add-on">Key</span>
-										<input type="text" ng-model="ro">
-										<a href="" class="btn" ng-click="removeFromList(c.relation, $index)"><i class="icon icon-remove"></i></a>
+										<input type="text" ng-model="c.relation.key" ro-search>
 									</div>
+									<div class="control-group">
+										<label class="control-label">Relation:</label>
+										<div class="controls">
+											<select ng-model="c.relation.type" ng-options="f.type as f.name for f in available_relation_class"></select>
+										</div>
+									</div>
+									<a href="" ng-click="preview_relation(c)" class="btn btn-small">Fetch Relations</a>
 								</form>
 							</div>
 
