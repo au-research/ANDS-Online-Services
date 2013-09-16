@@ -16,7 +16,6 @@ RewriteRule ^(.*?)/assets/(.*?)/(.*)$ assets/$2/$3 [L]
 RewriteCond $1 !^applications/.*/
 RewriteRule ^(.*?)/assets/(.*?)/(.*)$ applications/$1/$2/assets/$3 [L]
 
-
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} !(.*)/$
 RewriteRule ^(.*)$ $1/ [L]

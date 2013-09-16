@@ -88,10 +88,12 @@ function initConnections(){
         var slug = $(this).attr('ro_slug');
         var id = $(this).attr('ro_id');
         var relation_type = $(this).attr('relation_type');
+        var page = ($(this).attr('page') != '' ? $(this).attr('page') : 1);
         if(slug != '')
-            var url = base_url+'view/getConnections/?slug='+slug+'&relation_type='+relation_type;
-        if(id != '')
-            var url = base_url+'view/getConnections/?id='+id+'&relation_type='+relation_type
+            var url = base_url+'view/getConnections/?page='+page+'&slug='+slug+'&relation_type='+relation_type;
+        if(typeof id != 'undefined' && id != '')
+            var url = base_url+'view/getConnections/?page='+page+'&id='+id+'&relation_type='+relation_type;
+
         $(this).qtip({
             content: {
                 text: loading_icon,
@@ -455,57 +457,83 @@ function initConnectionGraph()
                             else if (node.data['class']=="activity")
                             {
                                 $(nodeSpan).find("span.dynatree-icon").css("background-position", "-57px -155px");
-                            }
+                            } 
+                            
                             $(nodeSpan).attr('title', $(nodeSpan).text());
+                            $('a',$(nodeSpan)).attr('href', base_url + node.data.slug);
 
-                            /* Prepare the tooltip preview */
-                            $('#' + node.li.id).qtip({
-                                content: {
-                                    text: 'Loading preview...',
-                                    title: {
-                                        text: 'Preview',
-                                        button: 'Close'
-                                    },
-                                    ajax: {
-                                        url: preview_url, 
-                                        type: 'GET',
-                                        //data: { "slug": node.data.slug, "registry_object_id": node.data.registry_object_id },
-                                        success: function(data, status) {
-                                            data = $.parseJSON(data);                                       
-					    var decoded_content = $(data.html);
-					    var content_description = htmlDecode(decoded_content.find('.post .descriptions').html());
-					    decoded_content.find('.post .descriptions').html('<small>' + content_description + '</small>');
-                                            this.set('content.text', decoded_content);
+                            if (node.data['class']=="more")
+                            {
+                                $(nodeSpan).find("span.dynatree-icon").remove();
+                                var a = $('a',$(nodeSpan));
 
-                                            if (data.slug)
-                                            {
-                                                $('.viewRecord').attr("href", base_url + data.slug);
-                                            }
-                                            else
-                                            {
-                                                $('.viewRecord').attr("href",base_url+"view/?id=" + data.registry_object_id);
-                                            }
-                                        } 
-                                    }
-                                },
-                                position: {
-                                    my: 'left center',
-                                    at: 'right center',
-                                    target: $('#' + node.li.id + " > span")
-                                },
-                                show: {
-                                    event: 'none',
-                                    solo: true
-                                },
-                                hide: {
-                                    delay: 1000,
-                                    fixed: true,
-                                },
-                                style: {
-                                    classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup',
-                                    width: 550,
+                                // Bind the accordion classes and attributes
+                                a.addClass('view_all_connection');
+                                if (node.data.status=='PUBLISHED')
+                                {
+                                    a.attr('ro_slug', node.data.slug);
                                 }
-                            });
+                                else
+                                {
+                                    a.attr('ro_id', node.data.registry_object_id);
+                                }
+
+                                a.attr('relation_type','nested_collection');
+                                a.attr('page', 2);
+                                console.log($(nodeSpan).html());
+                            }
+                            else
+                            {
+
+                                /* Prepare the tooltip preview */
+                                $('#' + node.li.id).qtip({
+                                    content: {
+                                        text: 'Loading preview...',
+                                        title: {
+                                            text: 'Preview',
+                                            button: 'Close'
+                                        },
+                                        ajax: {
+                                            url: preview_url, 
+                                            type: 'GET',
+                                            //data: { "slug": node.data.slug, "registry_object_id": node.data.registry_object_id },
+                                            success: function(data, status) {
+                                                data = $.parseJSON(data);                                       
+                        					    var decoded_content = $(data.html);
+                        					    var content_description = htmlDecode(decoded_content.find('.post .descriptions').html());
+                        					    decoded_content.find('.post .descriptions').html('<small>' + content_description + '</small>');
+                                                this.set('content.text', decoded_content);
+
+                                                if (data.slug)
+                                                {
+                                                    $('.viewRecord').attr("href", base_url + data.slug);
+                                                }
+                                                else
+                                                {
+                                                    $('.viewRecord').attr("href",base_url+"view/?id=" + data.registry_object_id);
+                                                }
+                                            } 
+                                        }
+                                    },
+                                    position: {
+                                        my: 'left center',
+                                        at: 'right center',
+                                        target: $('#' + node.li.id + " > span")
+                                    },
+                                    show: {
+                                        event: 'none',
+                                        solo: true
+                                    },
+                                    hide: {
+                                        delay: 1000,
+                                        fixed: true,
+                                    },
+                                    style: {
+                                        classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup',
+                                        width: 550,
+                                    }
+                                });
+                            }
     					},
 
     			        persist: false,
@@ -517,24 +545,26 @@ function initConnectionGraph()
     			        imagePath: "/",
     			        debugLevel: 0
     			    });
-		$('#collectionStructureWrapper a.hide.collectionNote')
-		    .qtip({
-		      content:{
-			title: {
-			  text:'Browse nested collections'
-			},
-			text: $('#collectionStructureQtip')
-		      },
-		      style: {
-			classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup',
-			width: 550
-		      }
-		    }).removeClass('hide');
-                $('#collectionStructureWrapper').show();
-                }
-            }, 
-            'json'
-    );
+
+
+            		$('#collectionStructureWrapper a.hide.collectionNote')
+                        .qtip({
+                          content:{
+                        title: {
+                          text:'Browse nested collections'
+                        },
+                        text: $('#collectionStructureQtip')
+                          },
+                          style: {
+                        classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup',
+                        width: 550
+                          }
+                        }).removeClass('hide');
+                            $('#collectionStructureWrapper').show();
+                            }
+                        }, 
+                        'json'
+                );  
 
 }
 
