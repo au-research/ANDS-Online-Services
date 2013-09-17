@@ -188,7 +188,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		// XXX: TODO: some logic to limit to 20 per "class of connection" and offset on request (for pagination)
 
 		// Return this registry object's connections
-		echo json_encode(array("connections"=>$connections, 'class'=>$registry_object->class));
+		echo json_encode(array("connections"=>$connections, 'class'=>$registry_object->class, 'slug'=>$registry_object->slug));
 	}
 
 
@@ -508,6 +508,30 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		}else{
 			$this->output->set_output('File Not Found');
 		}
+	}
+
+	public function getByList(){
+		$this->load->model('registry_object/registry_objects','ro');
+		$list = $this->input->post('list_ro');
+		if(!$list){
+			$data = file_get_contents('php://input');
+			$array = json_decode($data);
+			$list = $array->list_ro;
+		}
+		$ros = array();
+		foreach($list as $key){
+			$ro = $this->ro->getPublishedByKey($key);
+			if($ro){
+				$ros[] = array(
+					'title'=>$ro->title,
+					'id'=>$ro->id,
+					'key'=>$ro->key,
+					'slug'=>$ro->slug
+				);
+			}
+		}
+		// echo json_encode($ros);
+		$this->output->set_output(json_encode(array('ros'=>$ros)));
 	}
 
 	/* Setup this controller to handle the expected response format */
