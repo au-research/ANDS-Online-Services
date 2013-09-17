@@ -210,6 +210,11 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 	$scope.edit = function(c){
 		if(c.editing){
 			c.editing = false;
+			if(c.type=='search'){
+				$scope.preview_search(c);
+			}else if(c.type=='relation'){
+				$scope.preview_relation(c);
+			}
 			$scope.save();
 		}else c.editing = true;
 	}
