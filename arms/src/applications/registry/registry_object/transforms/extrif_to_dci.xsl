@@ -18,9 +18,9 @@
                 </DateProvided>
                 <RepositoryName>
                     <xsl:choose>
-                        <xsl:when test="ro:collection/ro:citationInfo/ro:citationMetadata/ro:context">
+                        <!--xsl:when test="ro:collection/ro:citationInfo/ro:citationMetadata/ro:context">
                             <xsl:value-of select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:context"/>
-                        </xsl:when>
+                        </xsl:when-->
                         <xsl:when test="ro:collection/ro:citationInfo/ro:citationMetadata/ro:publisher">
                             <xsl:value-of select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:publisher"/>
                         </xsl:when>
@@ -72,9 +72,6 @@
                     <xsl:if test="extRif:extendedMetadata/extRif:dataSourceTitle">
                         <SourceRepository>
                             <xsl:choose>
-                                <xsl:when test="ro:collection/ro:citationInfo/ro:citationMetadata/ro:context">
-                                    <xsl:value-of select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:context"/>
-                                </xsl:when>
                                 <xsl:when test="ro:collection/ro:citationInfo/ro:citationMetadata/ro:publisher">
                                     <xsl:value-of select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:publisher"/>
                                 </xsl:when>
@@ -144,9 +141,9 @@
                     </xs:annotation>
                 </xs:element>
                 -->
-                <xsl:if test="ro:collection/ro:coverage/ro:spatial | ro:collection/ro:location/ro:spatial">
+                <xsl:if test="ro:collection/ro:coverage/ro:spatial"> <!--| ro:collection/ro:location/ro:spatial"-->
                     <GeographicalData>
-                        <xsl:apply-templates select="ro:collection/ro:coverage/ro:spatial |  ro:collection/ro:location/ro:spatial"/>
+                        <xsl:apply-templates select="ro:collection/ro:coverage/ro:spatial" /> <!--| ro:collection/ro:location/ro:spatial"-->
                     </GeographicalData>
                 </xsl:if>
                 <!--
@@ -171,9 +168,14 @@
                     </xs:complexType>
                 </xs:element>
                 -->
-                <xsl:if test="ro:collection/ro:coverage/ro:temporal/ro:date | ro:collection/ro:dates/ro:date">
+                <xsl:if test="ro:collection/ro:relatedInfo[@type='reuseInformation']">
+                    <MethodologyList>
+                        <xsl:apply-templates select="ro:collection/ro:relatedInfo[@type='reuseInformation']"/>
+                    </MethodologyList>
+                </xsl:if>
+                <xsl:if test="ro:collection/ro:coverage/ro:temporal/ro:date">
                     <TimeperiodList>
-                        <xsl:apply-templates select="ro:collection/ro:coverage/ro:temporal/ro:date | ro:collection/ro:dates/ro:date"/>
+                        <xsl:apply-templates select="ro:collection/ro:coverage/ro:temporal/ro:date"/>
                     </TimeperiodList>
                 </xsl:if>
                 <!--
@@ -209,17 +211,36 @@
             </xsl:if>
             <!--
             <MicrocitationData/>-->
-            <xsl:if test="ro:collection/ro:citationInfo/ro:fullCitation">
+            <!--xsl:if test="ro:collection/ro:citationInfo/ro:fullCitation">
                 <CitationList>
                     <xsl:apply-templates select="ro:collection/ro:citationInfo/ro:fullCitation"/>
                 </CitationList>
-            </xsl:if>
+            </xsl:if-->
         </DataRecord>
     </xsl:template>
 
 
     <xsl:template match="extRif:displayTitle">
         <xsl:value-of select="."/>
+    </xsl:template>
+
+    <xsl:template match="ro:collection/ro:relatedInfo[@type='reuseInformation']">
+        <Methodology>
+            <xsl:value-of select="ro:title" /> 
+
+            <xsl:if test="ro:identifier">
+               <xsl:apply-templates select="ro:identifier" mode="methodology"/>
+            </xsl:if>
+
+            <xsl:if test="ro:notes != ''"> (<xsl:value-of select="ro:notes"/>)</xsl:if>
+        </Methodology>
+    </xsl:template>
+
+    <xsl:template match="ro:identifier" mode="methodology">
+         &lt;<xsl:if test="@type!='uri'">
+                    <xsl:value-of select="@type"/><xsl:text>:</xsl:text>
+                </xsl:if> 
+                <xsl:value-of select="."/>&gt; 
     </xsl:template>
 
     <xsl:template match="ro:fullCitation">
@@ -319,7 +340,7 @@
 
     <xsl:template match="ro:subject" mode="namedPerson">
         <NamedPerson>
-            <xsl:value-of select="."/>
+            <xsl:value-of select="."/><xsl:if test="@termIdentifier != ''"> (<xsl:value-of select="@termIdentifier" />)</xsl:if>
         </NamedPerson>
     </xsl:template>
 
@@ -342,14 +363,23 @@
                 <AuthorName>
                     <xsl:apply-templates select="extRif:related_object_display_title"/>
                 </AuthorName>
+                <AuthorRole postproc="1">
+                    <xsl:value-of select="extRif:related_object_relation"/>
+                </AuthorRole>
+                <ResearcherID postproc="1">
+                    <xsl:value-of select="extRif:related_object_key"/>
+                </ResearcherID>
             </Author>
         </xsl:if>
     </xsl:template>
 
     <xsl:template match="extRif:related_object" mode="fundingInfo">
-        <FundingStatement>
+        <GrantNumber>
+            <xsl:apply-templates select="extRif:related_object_key"/>
+        </GrantNumber>
+        <FundingOrganisation>
             <xsl:apply-templates select="extRif:related_object_display_title"/>
-        </FundingStatement>
+        </FundingOrganisation>
     </xsl:template>
 
     <xsl:template match="ro:namePart">
