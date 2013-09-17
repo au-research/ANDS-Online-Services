@@ -74,9 +74,9 @@ class Orcid extends MX_Controller {
 		$xml = '<?xml version="1.0" encoding="UTF-8"?>
 <orcid-message
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.orcid.org/ns/orcid http://orcid.github.com/ORCID-Parent/schemas/orcid-message/1.0.7/orcid-message-1.0.7.xsd"
+    xsi:schemaLocation="http://www.orcid.org/ns/orcid http://orcid.github.com/ORCID-Parent/schemas/orcid-message/1.0.9/orcid-message-1.0.9.xsd"
     xmlns="http://www.orcid.org/ns/orcid">
-<message-version>1.0.7</message-version>
+<message-version>1.0.9</message-version>
 <orcid-profile>
   <orcid-activities>
     <orcid-works> 
@@ -168,16 +168,19 @@ class Orcid extends MX_Controller {
 		$this->solr->setOpt('fq', '+display_title:('.$last_name.')');
 		$this->solr->executeSearch();
 
+		$already_checked = array();
+
 		if($this->solr->getNumFound() > 0){
 			$result = $this->solr->getResult();
 			// echo json_encode($result);
 			foreach($result->{'docs'} as $d){
-				$ro = $this->ro->getByID($d->{'id'});
+				if(!in_array($d->{'id'}, $already_checked)) $ro = $this->ro->getByID($d->{'id'});
 				$connections = $ro->getConnections(true,'collection');
 				// var_dump($connections[0]['collection']);
 				if(isset($connections[0]['collection']) && sizeof($connections[0]['collection']) > 0) {
 					$suggested_collections=array_merge($suggested_collections, $connections[0]['collection']);
 				}
+				array_push($already_checked, $d->{'id'});
 				unset($ro);
 			}
 		}
@@ -192,11 +195,13 @@ class Orcid extends MX_Controller {
 		if($this->solr->getNumFound() > 0){
 			$result = $this->solr->getResult();
 			foreach($result->{'docs'} as $d){
+				if(!in_array($d->{'id'}, $already_checked)) $ro = $this->ro->getByID($d->{'id'});
 				$ro = $this->ro->getByID($d->{'id'});
 				$connections = $ro->getConnections(true,'collection');
 				if(sizeof($connections[0]['collection']) > 0) {
 					$suggested_collections=array_merge($suggested_collections, $connections[0]['collection']);
 				}
+				array_push($already_checked, $d->{'id'});
 				unset($ro);
 			}
 		}

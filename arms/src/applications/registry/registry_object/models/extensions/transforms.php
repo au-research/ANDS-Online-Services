@@ -91,7 +91,50 @@ class Transforms_Extension extends ExtensionBase
 			$dom = new DOMDocument();
 			$dom->loadXML($this->ro->getExtRif());
 			$xslt_processor->setParameter('','dateProvided', date("Y-m-d"));
-			return $xslt_processor->transformToXML($dom);
+			$xml_output = $xslt_processor->transformToXML($dom);
+
+			$dom = new DOMDocument;
+			$dom->loadXML($xml_output);
+			$sxml = simplexml_import_dom($dom);
+
+			// Post-process the AuthorRole element
+			$roles = $sxml->xpath('//AuthorRole[@postproc="1"]');
+			foreach ($roles AS $i => $role)
+			{
+				// Change the value of the relation to be human-readable
+				$roles[$i][0] = format_relationship("collection",(string)$roles[$i],'EXPLICIT');
+				// Remove the "to-process" marker
+				unset($roles[$i]["postproc"]);
+			}
+
+			// Post-process the ResearcherID element
+			$roles = $sxml->xpath('//ResearcherID[@postproc="1"]');
+			foreach ($roles AS $i => $role)
+			{
+				//$this->_CI->load->model('data_source/data_sources','ds');
+				$researcher_object = $this->_CI->ro->getPublishedByKey((string)$roles[$i][0]);
+				if ($researcher_object && $researcher_sxml = $researcher_object->getSimpleXML())
+				{
+					$orcids = $researcher_sxml->xpath('//ro:identifier[@type="orcid"]');
+
+					if (count($orcids))
+					{
+						$roles[$i][0] = "http://orcid.org/" . $orcids[0][0];
+						unset($roles[$i]["postproc"]);
+					}
+					else
+					{
+						unset($roles[$i][0]);
+					}
+				}
+				else
+				{
+					unset($roles[$i][0]);
+				}
+			}
+
+			return trim(removeXMLDeclaration($sxml->asXML())) . NL;
+
 		}catch (Exception $e)
 		{
 			echo "UNABLE TO TRANSFORM" . BR;	

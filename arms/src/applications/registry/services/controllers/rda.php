@@ -423,21 +423,19 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		// Loop through to get all immediate ancestors and build their trees
 		$trees = array();
 		$ancestors = $this->connectiontree->getImmediateAncestors($this_registry_object, $published_only);
-		// var_dump($ancestors);
+
 		if ($ancestors)
 		{
-			$unique_ancestors = array();
 			foreach ($ancestors AS $ancestor_element)
 			{
-				if($this_registry_object->id!=$ancestor_element['registry_object_id']){
+				if($this_registry_object->id != $ancestor_element['registry_object_id']){
 					$root_element_id = $this->connectiontree->getRootAncestor($this->ro->getByID($ancestor_element['registry_object_id']), $published_only);
 					$root_registry_object = $this->ro->getByID($root_element_id->id);
 
 					// Only generate the tree if this is a unique ancestor
-					if (!isset($unique_ancestors[$root_registry_object->id]))
+					if (!isset($this->connectiontree->recursed_children[$root_registry_object->id]))
 					{
-						$unique_ancestors[$root_registry_object->id] = true;
-						$trees[] = $this->connectiontree->get($root_registry_object, $depth, $published_only);
+						$trees[] = $this->connectiontree->get($root_registry_object, $depth, $published_only, $this_registry_object->id);
 					}
 				}
 			}
@@ -447,9 +445,9 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 			$trees[] = $this->connectiontree->get($this_registry_object, $depth, $published_only);
 		}
 
-		// XXX: Option to cleanup & format
 		echo json_encode(array("status"=>"success", "trees"=>$trees));
 	}
+
 
 	public function getContributorPage()
 	{

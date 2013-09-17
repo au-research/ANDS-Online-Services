@@ -286,13 +286,13 @@ class View extends MX_Controller {
 			$data['related_identity_type']='registry_object_id';
 		}
 		$connections = $connections['connections'];
+		$data['relation_type'] = ($this->input->get('relation_type') == "nested_collection" ? "collection" : $this->input->get('relation_type'));
 		$data['currentPage'] = $page;
-		$data['totalPage'] = ceil(($connections[0][$this->input->get('relation_type').'_count'])/$limit);
-		$data['totalResults'] = $connections[0][$this->input->get('relation_type').'_count'];
+		$data['totalPage'] = ceil(($connections[0][$data['relation_type'].'_count'])/$limit);
+		$data['totalResults'] = $connections[0][$data['relation_type'].'_count'];
 		$data['slug'] = $this->input->get('slug');
 		$data['id'] = $this->input->get('id');
 		$data['connections_contents'] = $connections[0];
-		$data['relation_type'] = $this->input->get('relation_type');
 		$this->load->view('connections_all', $data);
 	}
 

@@ -23,9 +23,11 @@
 					<p>
 						<a href="<?php echo $link?>" class="btn btn-block btn-primary">Login with ORCID ID</a>
 					</p>
+					<?php if($this->config->item('deployment_state')!='production'):?>
 					<div class="alert alert-info">
 						This is a demonstration of ORCID Integration Wizard with <a href="http://researchdata.ands.org.au">Research Data Australia</a>. A <a href="http://sandbox-1.orcid.org/oauth/signin" target="_blank">Sandbox ORCID account</a> is required for testing.
 					</div>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>

@@ -110,7 +110,25 @@ class Connections_Extension extends ExtensionBase
 
 			// Continue on for all types:
 			/* - Check the constraints */
-			$class_valid = (is_null($specific_type) || ($connection['class'] == $specific_type));
+			if (!is_null($specific_type))
+			{
+				if ($specific_type == "nested_collection")
+				{
+					$class_valid = ($connection['class'] == "collection" && 
+						($connection['origin'] == "EXPLICIT" && $connection['relation_type'] == "hasPart")
+						||
+						(in_array($connection['origin'], array("REVERSE_INT","REVERSE_EXT")) && $connection['relation_type'] == "isPartOf")
+					);
+				}
+				else
+				{
+					$class_valid = ($connection['class'] == $specific_type);
+				}
+			}
+			else
+			{
+				$class_valid = true;
+			}
 			$status_valid = (!$published_only || ($connection['status'] == PUBLISHED));
 			if ($class_valid && $status_valid)
 			{

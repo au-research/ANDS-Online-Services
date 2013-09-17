@@ -74,7 +74,7 @@ function curl_post($url, $post, $header=false)
 }
 
 
-function curl_file_get_contents($URL, $header)
+function curl_file_get_contents($URL, $header=null)
 {
     $c = curl_init();
     if(!$header){
@@ -248,4 +248,21 @@ function printAlternativeLoginForms($authenticators, $default_authenticator, $re
         if($key != $default_authenticator)
             printLoginForm($authenticators, $key, 'loginForm hide', $redirect);
     }
+}
+
+/*
+ * escapeSolrValue
+ * escaping sensitive items in a solr query
+ */
+function escapeSolrValue($string){
+    //$string = urldecode($string);
+    $match = array('\\','&', '|', '!', '(', ')', '{', '}', '[', ']', '^', '~', '*', '?', ':', ';', '/');
+    $replace = array('\\\\','&', '\\|', '\\!', '\\(', '\\)', '\\{', '\\}', '\\[', '\\]', '\\^', '\\~', '\\*', '\\?', '\\:', '\\;', '\\/');
+    $string = str_replace($match, $replace, $string);
+
+    if(substr_count($string, '"') % 2 != 0){
+        $string = str_replace('"', '\\"', $string);
+    }
+
+    return $string;
 }
