@@ -46,69 +46,69 @@
             </xsl:if>
             <work-type>
                 <xsl:choose>
-                    <xsl:when test="ro:collection/@type='Book'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Advertisement'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Audio/Visual'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Book'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Brochure'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Cartoon/comic'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Chapter Anthology'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Components'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Conference Proceedings'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Congressional Publication'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Court Case'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Database'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Dictionary Entry'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Digital Image'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Dissertation Abstract'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Dissertation'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Email'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Editorial'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Electronic Only'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Encyclopedia Article'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Executive Order'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Federal Bill'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Federl Report'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Federal Rule'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Federal Statute'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Federal Testimony'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Film / Movie'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Government Publication'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Interview'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Journal Article'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Lecture / Speech'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Legal'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Letter'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Live Performance'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Magazine Article'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Mailing List'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Manuscript'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Map / Chart'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Musical Recording'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Newsgroup'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Newsletter'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Newspaper Article'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Non-periodicals'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Other'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Painting'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Pamphlet'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Patent'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Periodicals'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Photograph'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Press Release'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Raw Data'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Religious Text'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Report'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Reports / Working Papers'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Review'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Scholarly Project'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Software'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Standards'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Television / Radio'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Theological Text'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Thesis'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:when test="ro:collection/@type='Web Site'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:otherwise>Other</xsl:otherwise>
+                    <xsl:when test="ro:collection/@type='book'">book</xsl:when>
+                    <xsl:when test="ro:collection/@type='Book'">book</xsl:when>
+                    <xsl:when test="ro:collection/@type='advertisement'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='audio-visual'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='brochure'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='cartoon-comic'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='chapter-anthology'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='components'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='conference-proceedings'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='congressional-publication'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='court-case'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='database'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='dictionary-entry'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='digital-image'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='dissertation-abstract'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='dissertation'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='email'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='editorial'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='electronic-only'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='encyclopedia-article'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='executive-order'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='federal-bill'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='federal-report'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='federal-rule'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='federal-statute'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='federal-testimony'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='film-movie'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='government-publication'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='interview'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='journal-article'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='lecture-speech'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='legal'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='letter'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='live-performance'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='magazine-article'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='mailing-list'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='manuscript'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='map-chart'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='musical-recording'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='newsgroup'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='newsletter'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='newspaper-article'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='non-periodicals'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='other'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='painting'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='pamphlet'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='patent'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='periodicals'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='photograph'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='press Release'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='raw-data'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='religious-text'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='report'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='reports-working-papers'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='review'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='scholarly-project'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='software'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='standards'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='television-radio'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='theological-text'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='thesis'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:when test="ro:collection/@type='web-site'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
+                    <xsl:otherwise>other</xsl:otherwise>
                 </xsl:choose>
             </work-type>
             <xsl:variable name="createdDate">
