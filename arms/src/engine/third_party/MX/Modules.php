@@ -173,7 +173,7 @@ class Modules
 
 		// Find files located outside this application directory
 		// i.e. if the first segment is the name of an application, include it in the search
-		if(in_array($segments[0], array_keys($CFG->item('application_directives'))) && count($segments) == 3)
+		if(count($segments) == 3 && in_array($segments[0], array_keys($CFG->item('application_directives'))))
 		{
 			Modules::$locations[substr(dirname(APP_PATH) . "/" . $segments[0] . "/",2)] = "../." . dirname(APP_PATH) . "/" . $segments[0] . "/";
 			array_shift($segments); // remove the application name now that we've included that app as a search location
