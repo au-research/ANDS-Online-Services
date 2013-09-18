@@ -32,7 +32,7 @@
 							<ul>
 								<li ng-repeat="doc in search_result[c.search.id].data.result.docs"><a href="<?php echo portal_url();?>{{doc.slug}}" target="_blank">{{doc.display_title}}</a></li>
 							</ul>
-							<a href="">View Full Search</a>
+							<a href="<?php echo portal_url('search') ?>#!/{{search_result[c.search.id].filter_query}}">View Full Search</a>
 						</div>
 
 						<div ng-show="c.type=='facet'" ng-bind-html="search_result[c.facet.search_id].data.facet.facet_fields[c.facet.type] | facet_display"></div>
@@ -115,7 +115,7 @@
 												<a href="" tip="Boost This Record" ng-click="addBoost(c, doc.key)"><i class="icon icon-arrow-up"></i></a>
 											</li>
 										</ul>
-										<a href="">View Full Search</a>
+										<a href="<?php echo portal_url('search') ?>#!/{{search_result[c.search.id].filter_query}}">View Full Search</a>
 									</div>
 									<div ng-show="search_result[c.search.id].data.numFound == 0">
 										There are no search result!

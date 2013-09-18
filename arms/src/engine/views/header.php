@@ -203,8 +203,12 @@ else
                     <?php if (($this->user->hasFunction('PUBLIC')) && mod_enabled('abs_sdmx_querytool')): ?>
                       <li class="divider"></li>
                       <li class=""><?php echo anchor(apps_url('abs_sdmx_querytool'), 'ABS SDMX Query Tool');?></li>
-                    <?php endif; ?>      
+                    <?php endif; ?>
 
+                    <?php if(mod_enabled('theme_cms')): ?>
+                      <li class="divider"></li>
+                      <li class=""><?php echo anchor(apps_url('theme_cms'), 'Theme Pages CMS');?></li>
+                    <?php endif; ?>
                   </ul>
                 </li>
               <?php endif; ?>

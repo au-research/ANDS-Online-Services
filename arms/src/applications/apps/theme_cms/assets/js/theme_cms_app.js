@@ -235,6 +235,7 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 				break;
 			case 'search': 
 				newObj = {name:'', value:''};
+				if(!blob.search) blob.search = [];
 				if(!blob.search.fq) blob.search.fq = []; list = blob.search.fq;
 				break;
 		}
@@ -250,21 +251,17 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 	}
 
 	$scope.preview_search = function(c){
-		if(c.search.query){
+		if(c.search){
 			if(!c.search.id) c.search.id = Math.random().toString(36).substring(7);
 			var filters = $scope.constructSearchFilters(c);
-			// if(filters['boost_key']){
-			// 	if(filters['boost_key'] instanceof Array){
-			// 		$(filters['boost_key']).each(function(){
-			// 			$scope.boosted_key.push(this);
-			// 		});
-			// 	}else{
-			// 		$scope.boosted_key.push(filters['boost_key']);
-			// 	}
-			// }
-			// console.log($scope.boosted_key);
 			search_factory.search(filters).then(function(data){
-				$scope.search_result[c.search.id] = {name:c.title, data:data, search_id:c.search.id};
+				filter_query ='';
+				$.each(filters, function(i, k){
+					if(k instanceof Array || (typeof(k)==='string' || k instanceof String)){
+						if(i!='fl') filter_query +=i+'='+encodeURIComponent(k)+'/';
+					}
+				});
+				$scope.search_result[c.search.id] = {name:c.title, data:data, search_id:c.search.id, filter_query:filter_query};
 				$scope.$watch('search_result', function(){
 					$scope.available_search = [];
 					angular.forEach($scope.search_result, function(key, value){

@@ -308,6 +308,7 @@ class Maintenance extends MX_Controller {
 				$ro->enrich();
 				$solrXML = $ro->transformForSOLR();
 				$this->solr->addDoc("<add>".$solrXML."</add>");
+				$data['message'] = $solrXML;
 				$this->solr->commit();
 			}elseif($use=='keys'){
 				foreach($ro as $r){

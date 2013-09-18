@@ -73,6 +73,7 @@
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:subjects/extRif:subject"/>
 
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:related_object"/>
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:tag"/>
 
         	</xsl:when>
         </xsl:choose>  
@@ -290,6 +291,13 @@
     <xsl:template match="extRif:displayTitle">
         <xsl:element name="field">
             <xsl:attribute name="name">display_title</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+
+    <xsl:template match="extRif:tag">
+        <xsl:element name="field">
+            <xsl:attribute name="name">tag</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>

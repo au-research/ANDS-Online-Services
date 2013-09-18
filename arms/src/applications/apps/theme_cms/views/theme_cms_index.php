@@ -123,7 +123,6 @@
 				?>
 			</div>
 		</div>
-		{{page | json}}
 	</div>
 
 </div>

@@ -65,6 +65,7 @@ $(document).on('click','button.task',function(){
 		case 'cleanNotExist': url= base_url+'maintenance/cleanNotExist/';break;
 	}
 	$.getJSON(url, function(data) {
+		log(data);
 		updateDataSourcesStat();
 	});
 }).on('click','#refresh', function(){

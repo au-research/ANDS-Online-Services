@@ -127,7 +127,7 @@ class Solr {
      * @return array 
      */
     function getResult(){
-    	return $this->result->{'response'};
+        return $this->result->{'response'};
     }
 
     function getFacet(){
@@ -263,6 +263,9 @@ class Solr {
                     break;
                 case 'fl':
                     $this->setOpt('fl', $value);
+                    break;
+                case 'tag':
+                    $this->setOpt('fq', '+tag:("'.$value.'")');
                     break;
             }
         }
