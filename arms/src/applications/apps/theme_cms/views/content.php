@@ -42,8 +42,19 @@
 						</div>
 
 						<hr/>
-						<a href="" ng-click="edit(c)" class="btn">Edit</a>
-						<a href="" ng-click="delete_blob('<?php echo $region; ?>', $index)" class="btn btn-danger"><i class="icon-white icon-trash"></i></a>
+						<div class="btn-group">
+							<a href="" ng-click="edit(c)" class="btn"><i class="icon-pencil"></i> Edit</a>
+							<a href="" data-toggle="dropdown" class="btn"><span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="" ng-click="delete_blob('<?php echo $region; ?>', $index)"><i class="icon icon-trash"></i> Delete</a></li>
+								<li>
+									<a href="" ng-click="toggle_visible(c)">
+										<span ng-show="c.hide"><i class="icon icon-eye-closed"></i> Hide</span>
+										<span ng-hide="c.hide"><i class="icon icon-eye-closed"></i> Show</span>
+									</a>
+								</li>
+							</ul>
+						</div>
 					</div>
 
 					<div ng-show="c.editing">
