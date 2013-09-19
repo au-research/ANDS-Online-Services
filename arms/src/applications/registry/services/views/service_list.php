@@ -39,12 +39,12 @@
 						</blockquote>
 						<dl class="dl-horizontal">
 						  <dt>Service URL: </dt>
-						  <dd><code>.../services/&lt;your API key&gt;/getRIFCS.xml/?&lt;params&gt;</code></dd>
+						  <dd><code>.../services/&lt;your API key&gt;/getRIFCS/?&lt;params&gt;</code></dd>
 						</dl>
 					</div>
 					
 			    	<div>
-			    		<span class="label label-info">Head's Up</span><br/>Request a JSON response by substituting .json for .xml in the request URI
+			    		<span class="label label-info">Head's Up</span><br/>Request a JSON response by substituting /getRIFCS.json/ for /getRIFCS/ in the request URI
 			    	</div>
 			    	
 			    </div>
@@ -91,7 +91,7 @@
 			    	<h5>Query Parameters</h5>
 
 			    	<p>
-			    	All web services (except OAI-PMH) support SOLR query parameters. <?=anchor('services/query_schema','View the schema fields');?>   	
+			    	All web services (except OAI-PMH) support a subset of the <a href="http://wiki.apache.org/solr/CommonQueryParameters" target="_blank">SOLR Common Query Parameters</a>. <?=anchor('services/query_schema','View the schema fields');?>   	
 			    	</p>
 				
 			    </div>	
