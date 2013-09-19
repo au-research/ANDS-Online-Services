@@ -436,7 +436,7 @@
     </div>
     <a href="javascript:;" class="sharing_widget">Share</a>
     <!-- AddThis Button BEGIN -->
-    <div class="addthis_toolbox addthis_default_style ">
+    <div class="addthis_toolbox addthis_default_style " style="float:right;">
       <a class="addthis_button_facebook_like"></a>
       <a class="addthis_button_tweet"></a>
       <a class="addthis_counter addthis_pill_style"></a>
