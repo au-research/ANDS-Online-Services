@@ -37,6 +37,59 @@ angular.module('portal_theme',[]).
 			}
 		}
 	}).
+	directive('carousel', function(){
+		return {
+			restrict: 'AC',
+			link: function(scope, element, attrs){
+				$(element).flexslider({
+				    animation: "slide",
+				    controlNav: true,
+				    slideshowSpeed: 2500,
+				    pauseOnHover:true,
+				    directionNav:false,
+				  });
+			}
+		}
+	}).
+	directive('filmstrip', function(){
+		return {
+			restrict : 'A',
+			link: function(scope, element, attrs){
+				
+
+				$('.scroll', element).on('click', function(){
+					if($(this).hasClass('left')){
+						$('.filmstrip', element).animate({
+							scrollLeft: '-=150'
+						}, 500, 'easeOutQuad', check);
+					}else{
+						$('.filmstrip', element).animate({
+							scrollLeft: '+=150'
+						}, 500, 'easeOutQuad', check);
+					}
+				});
+
+				var totalWidth = 0;
+				$('img', element).each(function(){
+					totalWidth += $(this).width();
+				});
+
+				check();
+				function check(){
+					var current = $('.filmstrip', element).scrollLeft();
+					if(current==0){
+						$('.left', element).hide();
+					}else $('.left', element).show();
+
+					if(current + $('.filmstrip', element).width() >= totalWidth){
+						$('.right', element).hide();
+					}else{
+						$('.right', element).show();
+					}
+				}
+			}
+		}
+	}).
 	filter('class_name', function(){
 		return function(text){
 			switch(text){

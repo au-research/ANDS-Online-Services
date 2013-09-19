@@ -177,6 +177,10 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 			{type:'party_multi', name:'Research Groups'},
 			{type:'activity', name:'Activities'},
 			{type:'service', name:'Services'}
+		];
+		$scope.gallery_types = [
+			{name: 'Carousel', value:'carousel'},
+			{name: 'Filmstrip', value:'filmstrip'}
 		]
 	});
 	$scope.addContent = function(region){

@@ -22,6 +22,7 @@
 						<div ng-bind-html="c.content" ng-show="c.type == 'html'"></div>
 						<div ng-show="c.type=='gallery'">
 							<a colorbox ng-repeat="img in c.gallery" href="{{img.src}}" rel="{{c.title}}"><img src="{{img.src}}" alt="" style="width:100px;" rel="{{c.title}}"></a>
+							<br/>Type: {{c.gallery_type}}
 						</div>
 						<div ng-show="c.type=='list_ro'">
 							<ul>
@@ -67,6 +68,7 @@
 							</div>
 
 							<div ng-show="c.type == 'gallery'">
+								<select ng-model="c.gallery_type" ng-options="f.value as f.name for f in gallery_types"></select>
 								<div ng-repeat="img in c.gallery">
 									<div class="input-prepend input-append">
 										<span class="add-on">Image Link</span>

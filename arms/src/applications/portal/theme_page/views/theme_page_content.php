@@ -7,9 +7,28 @@
 	<?php if($f['type']=='separator'): ?><hr/><?php endif; ?>
 
 	<?php if($f['type']=='gallery'): ?>
-			<?php foreach($f['gallery'] as $i): ?>
-			<a colorbox href="<?php echo $i['src']; ?>" rel="<?php echo $f['title'] ?>"><img src="<?php echo $i['src']; ?>" alt="" style="width:100px;" rel="<?php echo $f['title']; ?>"></a>
-			<?php endforeach; ?>
+		<?php if($f['gallery_type']=='carousel'): ?>
+			<div class="flexslider" carousel style="min-height:0;margin-bottom:60px;">
+				<ul class="slides">
+					<?php foreach($f['gallery'] as $i): ?>
+					<li><a href="<?php echo $i['src'] ?>" rel="<?php echo $f['title'] ?>" colorbox><img src="<?php echo $i['src'];?>" alt="" rel="<?php echo $f['title'] ?>"></a></li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+		<?php endif; ?>
+		<?php if($f['gallery_type']=='filmstrip'): ?>
+			<div class="scroller" filmstrip>
+				<div class="scroll left"></div>
+				<div class="scroll right"></div>
+				<div class="filmstrip">
+					<ul>
+						<?php foreach($f['gallery'] as $i): ?>
+						<li><a href="<?php echo $i['src'] ?>" rel="<?php echo $f['title'] ?>" colorbox><img src="<?php echo $i['src'];?>" alt="" rel="<?php echo $f['title'] ?>"></a></li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+			</div>
+		<?php endif; ?>
 	<?php endif; ?>
 
 	<?php if($f['type']=='search'): ?>
