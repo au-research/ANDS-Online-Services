@@ -86,6 +86,8 @@ class Transforms_Extension extends ExtensionBase
 
 	function transformToDCI()
 	{
+		$this->_CI->load->helper('normalisation');
+
 		try{
 			$xslt_processor = Transforms::get_extrif_to_dci_transformer();
 			$dom = new DOMDocument();
@@ -98,40 +100,84 @@ class Transforms_Extension extends ExtensionBase
 			$sxml = simplexml_import_dom($dom);
 
 			// Post-process the AuthorRole element
-			$roles = $sxml->xpath('//AuthorRole[@postproc="1"]');
+			$roles = $sxml->xpath('//Author[@postproc="1"]');
 			foreach ($roles AS $i => $role)
 			{
-				// Change the value of the relation to be human-readable
-				$roles[$i][0] = format_relationship("collection",(string)$roles[$i],'EXPLICIT');
 				// Remove the "to-process" marker
-				unset($roles[$i]["postproc"]);
-			}
 
-			// Post-process the ResearcherID element
-			$roles = $sxml->xpath('//ResearcherID[@postproc="1"]');
-			foreach ($roles AS $i => $role)
-			{
-				//$this->_CI->load->model('data_source/data_sources','ds');
-				$researcher_object = $this->_CI->ro->getPublishedByKey((string)$roles[$i][0]);
+				unset($roles[$i]["postproc"]);
+				// Change the value of the relation to be human-readable
+				$role->AuthorRole[0] = format_relationship("collection",(string)$role->AuthorRole[0],'EXPLICIT');
+				
+				// Include identifiers and addresses for this author (if they exist in the registry)
+				$researcher_object = $this->_CI->ro->getPublishedByKey((string)$role->ResearcherID[0]);
 				if ($researcher_object && $researcher_sxml = $researcher_object->getSimpleXML())
 				{
-					$orcids = $researcher_sxml->xpath('//ro:identifier[@type="orcid"]');
-
-					if (count($orcids))
-					{
-						$roles[$i][0] = "http://orcid.org/" . $orcids[0][0];
-						unset($roles[$i]["postproc"]);
+					// Handle the researcher IDs (using the normalisation_helper.php)
+					$researcher_ids = $researcher_sxml->xpath('//ro:identifier');
+					if (is_array($researcher_ids))
+					{	
+						$role->ResearcherID[0] = implode("\n", array_map('normaliseIdentifier', $researcher_ids));
+						if ((string) $role->ResearcherID[0] == "")
+						{
+							unset($roles[$i]->ResearcherID[0]);
+						}
 					}
 					else
 					{
-						unset($roles[$i][0]);
+						unset($roles[$i]->ResearcherID[0]);
+					}
+
+					try
+					{
+						// Do we have an address? (using the normalisation_helper.php)
+						$researcher_addresses = $researcher_sxml->xpath('//ro:location/ro:address');
+						$address_string = "";
+						if (is_array($researcher_addresses))
+						{
+							foreach($researcher_addresses AS $_addr)
+							{
+								if ($_addr->physical)
+								{
+									$address_string .= normalisePhysicalAddress($_addr->physical);
+								}
+								else if ($_addr->electronic)
+								{
+									$address_string .= (string) $_addr->electronic->value;
+								}
+							}
+						}
+						if ($address_string)
+						{
+							$role->AuthorAddress = $address_string;
+						}
+					}
+					catch (Exception $e)
+					{
+						// ignore sloppy coding errors...SimpleXML is awful
 					}
 				}
 				else
 				{
-					unset($roles[$i][0]);
+					unset($roles[$i]->ResearcherID[0]);
 				}
 			}
+
+
+			/* Post-process the Citations element
+			$citations = $sxml->xpath('//CitationList[@postproc="1"]');
+			foreach ($citations AS $i => $citations)
+			{
+				// Remove the "to-process" marker
+				unset($citations[$i]["postproc"]);
+
+				$role->ResearcherID[0] = implode("\n", array_map('normaliseIdentifier', $researcher_ids));
+				if ((string) $role->ResearcherID[0] == "")
+				{
+					unset($roles[$i]->ResearcherID[0]);
+				}
+			}*/
+
 
 			return trim(removeXMLDeclaration($sxml->asXML())) . NL;
 

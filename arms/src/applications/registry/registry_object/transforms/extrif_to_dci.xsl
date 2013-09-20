@@ -211,11 +211,11 @@
             </xsl:if>
             <!--
             <MicrocitationData/>-->
-            <!--xsl:if test="ro:collection/ro:citationInfo/ro:fullCitation">
-                <CitationList>
-                    <xsl:apply-templates select="ro:collection/ro:citationInfo/ro:fullCitation"/>
+            <xsl:if test="ro:collection/ro:relatedInfo[@type='publication']">
+                <CitationList postproc="1">
+                    <xsl:apply-templates select="ro:collection/ro:relatedInfo[@type='publication']"/>
                 </CitationList>
-            </xsl:if-->
+            </xsl:if>
         </DataRecord>
     </xsl:template>
 
@@ -243,11 +243,28 @@
                 <xsl:value-of select="."/>&gt; 
     </xsl:template>
 
-    <xsl:template match="ro:fullCitation">
+    <xsl:template match="ro:collection/ro:relatedInfo[@type='publication']">
         <Citation CitationType="Citing Ref">
-                <CitationText>
+            <CitationText>
                 <CitationString>
-                    <xsl:value-of select="."/>
+                    <xsl:value-of select="ro:title" />
+                    <xsl:if test="ro:identifier[@type='uri']">
+                        <xsl:text> &lt;</xsl:text>
+                        <xsl:value-of select="ro:identifier" />
+                        <xsl:text>&gt;</xsl:text>
+                    </xsl:if>
+                    <xsl:if test="ro:identifier[@type!='uri']">
+                        <xsl:text> &lt;</xsl:text>
+                        <xsl:value-of select="ro:identifier/@type" />
+                        <xsl:text>: </xsl:text>
+                        <xsl:value-of select="ro:identifier" />
+                        <xsl:text>&gt;</xsl:text>
+                    </xsl:if>
+                    <xsl:if test="ro:notes">
+                        <xsl:text> (</xsl:text>
+                        <xsl:value-of select="ro:notes" />
+                        <xsl:text>)</xsl:text>
+                    </xsl:if>
                 </CitationString>
             </CitationText>
         </Citation>
@@ -359,14 +376,14 @@
     </xsl:template>
     <xsl:template match="extRif:related_object">
         <xsl:if test="not(preceding::extRif:related_object[extRif:related_object_key = current()/extRif:related_object_key])">
-            <Author seq="{position()}">
+            <Author seq="{position()}" postproc="1">
                 <AuthorName>
                     <xsl:apply-templates select="extRif:related_object_display_title"/>
                 </AuthorName>
-                <AuthorRole postproc="1">
+                <AuthorRole>
                     <xsl:value-of select="extRif:related_object_relation"/>
                 </AuthorRole>
-                <ResearcherID postproc="1">
+                <ResearcherID>
                     <xsl:value-of select="extRif:related_object_key"/>
                 </ResearcherID>
             </Author>
