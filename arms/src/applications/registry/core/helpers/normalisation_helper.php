@@ -1,18 +1,55 @@
 <?php
-/* These functions are intended to bv
+/* These functions are intended to be used to transform RIFCS structured elements into a plain-text representation
+
 /* Takes a RIFCS location/address element and formats it into a concatenated string format */
 function normalisePhysicalAddress(SimpleXMLElement &$sxml)
 {
-	$address = "";
+	// Order elements according to the following metric
+	$type_weights = array(
+		"fullName" => 10,
+		"organisationName" => 15,
+		"buildingOrPropertyName" => 20,
+		"flatOrUnitNumber" => 25,
+		"floorOrLevelNumber" => 30,
+		"lotNumber" => 35,
+		"houseNumber" => 40,
+		"streetName" => 45,
+		"postalDeliveryNumberPrefix" => 50,
+		"postalDeliveryNumberValue" => 55,
+		"postalDeliveryNumberSuffix" => 60,
+		"addressLine" => 65,
+		"suburbOrPlaceOrLocality" => 70,
+		"stateOrTerritory" => 75,
+		"postCode" => 80,
+		"country" => 85,
+		"locationDescriptor" => 90,
+		"deliveryPointIdentifier" => 95
+	);
+	
+	$address_lines = array();
 	if(isset($sxml->addressPart))
 	{
+		$count = 0;
 		foreach ($sxml->addressPart AS $a)
 		{
-			$address .= (string) $a . NL;
+			$count++;
+			$type = trim((string) $a['type']);
+			if (array_key_exists($type, $type_weights))
+			{
+				$key = $type_weights[$type];
+			}
+			else
+			{
+				$key = 99;
+			}
+			$key .= sprintf("%02d", $count); // yeah, this will fail if there are more than 10 address parts of the same type...
+
+			$address_lines[$key] = trim((string) $a);
 		}
-		$address = trim($address);
+
+		ksort($address_lines, SORT_NUMERIC);
 	}
-	return $address;
+	return implode(NL, $address_lines);
 }
 
 /* Takes a RIFCS location/address element and formats it into an array of identifier elements */
