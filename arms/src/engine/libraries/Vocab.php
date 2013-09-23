@@ -94,7 +94,7 @@ class Vocab {
         if($type=='resource'){
             $resourceQueryComp = 'resource.json?uri=';
         }else if($type=='broader'){
-            $resourceQueryComp = 'concept/allBroader.json?uri=';
+            $resourceQueryComp = 'concepts/allBroader.json?uri=';
         }
         return $vocab['resolvingService'].$resourceQueryComp.$vocab['uriprefix'].$term;
     }
@@ -106,7 +106,7 @@ class Vocab {
     }
 
     function constructBroaderUriString($resolvingService, $uriprefix, $term){
-        $broaderQueryComp = 'concept/allBroader.json?uri=';
+        $broaderQueryComp = 'concepts/allBroader.json?uri=';
         $uri = $resolvingService.$broaderQueryComp.urlencode($uriprefix.$term);
         return $uri;
     }

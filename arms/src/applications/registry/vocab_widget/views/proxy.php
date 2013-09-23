@@ -35,11 +35,11 @@ else {
     define("BASE_URL", "http://ands3.anu.edu.au:8080/sissvoc/api/");
 }
 
-define("SEARCH_URL", "/concept.json?anycontains=");
-define("NARROW_URL", "/concept/narrower.json?uri=");
-define("ALLNARROW_URL", "/concept/allNarrower.json?uri=");
-define("BROAD_URL", "/concept/broader.json?uri="); #future use
-define("TOP_URL", "/topConcepts.json");
+define("SEARCH_URL", "/concepts.json?anycontains=");
+define("NARROW_URL", "/concepts/narrower.json?uri=");
+define("ALLNARROW_URL", "/concepts/allNarrower.json?uri=");
+define("BROAD_URL", "/concepts/broader.json?uri="); #future use
+define("TOP_URL", "/concepts/topConcepts.json");
 define("MAX_RESULTS", 200); #sisvoc only returns 200 items
 
 class VocabProxy
