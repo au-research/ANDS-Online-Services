@@ -285,6 +285,16 @@ function is_dev(){
 	}else return false;
 }
 
+function check_services(){
+	$CI =& get_instance();
+	$solr_status = (array) simplexml_load_string(curl_post($CI->config->item('solr_url').'admin/ping', ''));
+	if(!isset($solr_status['str']) || !$solr_status['str']=='OK'){
+		$error = $CI->load->view('soft500' , array(), true);
+		echo $error;
+		die();
+	}
+}
+
 function maxUploadSizeBytes()
 {
 	// Helper function to convert "2M" to bytes
