@@ -174,14 +174,16 @@ class Orcid extends MX_Controller {
 			$result = $this->solr->getResult();
 			// echo json_encode($result);
 			foreach($result->{'docs'} as $d){
-				if(!in_array($d->{'id'}, $already_checked)) $ro = $this->ro->getByID($d->{'id'});
-				$connections = $ro->getConnections(true,'collection');
-				// var_dump($connections[0]['collection']);
-				if(isset($connections[0]['collection']) && sizeof($connections[0]['collection']) > 0) {
-					$suggested_collections=array_merge($suggested_collections, $connections[0]['collection']);
+				if(!in_array($d->{'id'}, $already_checked)){
+					$ro = $this->ro->getByID($d->{'id'});
+					$connections = $ro->getConnections(true,'collection');
+					// var_dump($connections[0]['collection']);
+					if(isset($connections[0]['collection']) && sizeof($connections[0]['collection']) > 0) {
+						$suggested_collections=array_merge($suggested_collections, $connections[0]['collection']);
+					}
+					array_push($already_checked, $d->{'id'});
+					unset($ro);
 				}
-				array_push($already_checked, $d->{'id'});
-				unset($ro);
 			}
 		}
 
@@ -195,14 +197,16 @@ class Orcid extends MX_Controller {
 		if($this->solr->getNumFound() > 0){
 			$result = $this->solr->getResult();
 			foreach($result->{'docs'} as $d){
-				if(!in_array($d->{'id'}, $already_checked)) $ro = $this->ro->getByID($d->{'id'});
-				$ro = $this->ro->getByID($d->{'id'});
-				$connections = $ro->getConnections(true,'collection');
-				if(sizeof($connections[0]['collection']) > 0) {
-					$suggested_collections=array_merge($suggested_collections, $connections[0]['collection']);
+				if(!in_array($d->{'id'}, $already_checked)){
+					$ro = $this->ro->getByID($d->{'id'});
+					$ro = $this->ro->getByID($d->{'id'});
+					$connections = $ro->getConnections(true,'collection');
+					if(sizeof($connections[0]['collection']) > 0) {
+						$suggested_collections=array_merge($suggested_collections, $connections[0]['collection']);
+					}
+					array_push($already_checked, $d->{'id'});
+					unset($ro);
 				}
-				array_push($already_checked, $d->{'id'});
-				unset($ro);
 			}
 		}
 
