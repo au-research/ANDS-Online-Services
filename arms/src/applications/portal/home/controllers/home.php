@@ -6,6 +6,8 @@ class Home extends MX_Controller {
 		ini_set('xdebug.profiler_enable',1);
 		$data['title']='Research Data Australia';
 
+		check_services();
+
 		//solr for counts
 		$this->load->library('solr');
 		$this->solr->setOpt('q', '*:*');
