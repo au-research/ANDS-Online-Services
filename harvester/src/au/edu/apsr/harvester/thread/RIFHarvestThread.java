@@ -242,8 +242,14 @@ public class RIFHarvestThread extends HarvestThread
                 
                 Document doc = listRecords.getDocument();
                 Fragment frag = getFragment(docToString(doc), "ListRecords");
-
+               
                 if ((listRecords.getResumptionToken().length()==0)  || (harvest.getMode().equals(Constants.MODE_TEST))) 
+                {
+                    last = true;
+                }
+                 
+                String oldToken = getResumptionToken();
+                if(oldToken != null && oldToken.equals(listRecords.getResumptionToken()))
                 {
                     last = true;
                 }
@@ -259,8 +265,16 @@ public class RIFHarvestThread extends HarvestThread
                 log.info(harvest.getHarvestID() + " resumption token = " + listRecords.getResumptionToken());
                 if (listRecords.getResumptionToken().length() > 0)
                 {
-                	log.info("setting resumption token");
-                	setResumptionToken(listRecords.getResumptionToken());
+                    
+                    if(oldToken == null || !(oldToken.equals(listRecords.getResumptionToken())))
+                    {
+                        setResumptionToken(listRecords.getResumptionToken());
+                    }
+                    else
+                    {
+                        setResumptionToken(null);
+                        log.info("harvest " + harvest.getHarvestID() + " resumption token same as previous so no more records will be retrieved.");
+                   }
                 }
                 else
                 {
