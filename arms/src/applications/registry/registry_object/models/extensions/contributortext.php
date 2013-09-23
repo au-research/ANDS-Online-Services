@@ -62,15 +62,22 @@ class ContributorText_Extension extends ExtensionBase
 		elseif($subjectNum==1)
 		{
 			$subjectWord = 'area';		
-			$subjectStr = ', which covers the subject '.$subjectWord.' <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[0]).'">'.$subjectCount[0].'</a>.';
+			$subjectStr = ', which cover the subject '.$subjectWord.' <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[0]).'">'.$subjectCount[0].'</a>.';
 		}
 		elseif($subjectNum==2)
 		{
-			$subjectStr = ', which covers 	'.$subjectNum.' subject '.$subjectWord.' including <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[0]).'">'.$subjectCount[0].'</a> and <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[1]).'">'.$subjectCount[1].'</a>.';
+			$subjectStr = ', which cover 	'.$subjectNum.' subject '.$subjectWord.' including <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[0]).'">'.$subjectCount[0].'</a> and <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[1]).'">'.$subjectCount[1].'</a>.';
 		}	
 		else 
 		{
-			$subjectStr = ', which covers 	'.$subjectNum.' subject '.$subjectWord.' including <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[0]).'">'.$subjectCount[0].'</a>, <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[1]).'">'.$subjectCount[1].'</a> and <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[2]).'">'.$subjectCount[2].'</a>.';	
+			if ($subjectNum >= 100)
+			{
+				$subjectStr = ', which cover over '.$subjectNum.' subject '.$subjectWord.' including <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[0]).'">'.$subjectCount[0].'</a>, <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[1]).'">'.$subjectCount[1].'</a> and <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[2]).'">'.$subjectCount[2].'</a>.';	
+			}
+			else
+			{
+				$subjectStr = ', which cover '.$subjectNum.' subject '.$subjectWord.' including <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[0]).'">'.$subjectCount[0].'</a>, <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[1]).'">'.$subjectCount[1].'</a> and <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[2]).'">'.$subjectCount[2].'</a>.';	
+			}
 		}
 	
 
