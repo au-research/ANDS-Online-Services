@@ -48,7 +48,7 @@
 	// Default changes if we're running within the ANDS environments
 	if (typeof(window.real_base_url) !== 'undefined')
 	{
-		defaults['endpoint'] = window.real_base_url + 'registry/registry_object_search/';
+		defaults['endpoint'] = window.real_base_url + 'apps/registry_object_search/';
 	}
 
 	var settings;

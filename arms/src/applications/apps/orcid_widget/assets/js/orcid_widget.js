@@ -55,7 +55,7 @@
 	// Default changes if we're running within the ANDS environments
 	if (typeof(window.real_base_url) !== 'undefined')
 	{
-		defaults['endpoint'] = window.real_base_url + 'registry/orcid_widget/proxy/';
+		defaults['endpoint'] = window.real_base_url + 'apps/orcid_widget/proxy/';
 	} 
 
 	var settings;

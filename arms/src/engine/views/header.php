@@ -150,7 +150,7 @@ else
 
                     <?php if ($this->user->hasFunction('DOI_USER') && mod_enabled('mydois')): ?>
                       <li>
-                        <?php echo anchor(registry_url('mydois'), 'Digital Object Identifiers (DOI)');?>
+                        <?php echo anchor(apps_url('mydois'), 'Digital Object Identifiers (DOI)');?>
                       </li>
                     <?php endif; ?>
 
@@ -185,7 +185,7 @@ else
 
                     <?php if ($this->user->hasFunction('AUTHENTICATED_USER')): ?>
                         <li class=""><?php echo anchor(registry_url('services/'), 'Registry Web Services');?></li>
-                        <li class=""><?php echo anchor(registry_url('location_capture_widget/'), 'Location Capture Widget');?></li>
+                        <li class=""><?php echo anchor(apps_url('location_capture_widget/'), 'Location Capture Widget');?></li>
                         <li class=""><?php echo anchor(registry_url('vocab_widget/'), 'Vocabulary Service Widget');?></li>
                     <?php endif; ?>
 

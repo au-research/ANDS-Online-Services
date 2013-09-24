@@ -84,7 +84,7 @@
 	// Default changes if we're running within the ANDS environments
 	if (typeof(window.real_base_url) !== 'undefined')
 	{
-		defaults['endpoint'] = window.real_base_url + 'registry/vocab_widget/proxy/';
+		defaults['endpoint'] = window.real_base_url + 'apps/vocab_widget/proxy/';
 	}
 
 	var settings;

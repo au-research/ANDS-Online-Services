@@ -87,8 +87,12 @@ $base_url = str_replace('/apps','/registry',base_url());
             <link rel="stylesheet" type="text/css" href="<?php echo$base_url;?>assets/lib/bootstrap_datepicker/css/datepicker.css" />
 
         <?php elseif($lib=='ands_datepicker'):?>
-            <script type="text/javascript" src="<?php echo $base_url;?>assets/datepicker_tz_widget/js/ands_datetimepicker.js"></script>
-            <link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>assets/datepicker_tz_widget/css/ands_datetimepicker.css" />
+            <script type="text/javascript" src="<?php echo apps_url('assets/datepicker_tz_widget/js/ands_datetimepicker.js');?>"></script>
+            <link rel="stylesheet" type="text/css" href="<?php echo apps_url('assets/datepicker_tz_widget/css/ands_datetimepicker.css');?>" />
+
+        <?php elseif($lib=='ands_datetimepicker_widget'):?>
+            <link href="<?php echo apps_url('assets/datepicker_tz_widget/css/ands_datetimepicker.css');?>" rel="stylesheet" type="text/css">
+            <script src="<?php echo apps_url('assets/datepicker_tz_widget/js/ands_datetimepicker.js');?>" type="text/javascript"></script>
 
         <?php elseif($lib=='prettyprint'):?>
             <script type="text/javascript" src="<?php echo$base_url;?>assets/lib/prettyprint/pretty.js"></script>
@@ -104,24 +108,20 @@ $base_url = str_replace('/apps','/registry',base_url());
             <script src="<?php echo$base_url;?>assets/lib/bootstrap-contextmenu.js" type="text/javascript"></script>
 
         <?php elseif($lib=='vocab_widget'):?>
-            <link href="<?php echo$base_url;?>assets/vocab_widget/css/vocab_widget.css" rel="stylesheet" type="text/css">
-            <script src="<?php echo$base_url;?>assets/vocab_widget/js/vocab_widget.js" type="text/javascript"></script>
+            <link rel="stylesheet" type="text/css" href="<?php echo apps_url('assets/vocab_widget/css/vocab_widget.css'); ?>">
+            <script src="<?php echo apps_url('assets/vocab_widget/js/vocab_widget.js'); ?>"></script>
 
        <?php elseif($lib=='orcid_widget'):?>
-            <link href="<?php echo$base_url;?>assets/orcid_widget/css/orcid_widget.css" rel="stylesheet" type="text/css">
-            <script src="<?php echo$base_url;?>assets/orcid_widget/js/orcid_widget.js" type="text/javascript"></script>
+            <link href="<?php echo apps_url('assets/orcid_widget/css/orcid_widget.css');?>" rel="stylesheet" type="text/css">
+            <script src="<?php echo apps_url('assets/orcid_widget/js/orcid_widget.js');?>" type="text/javascript"></script>
 
         <?php elseif($lib=='location_capture_widget'):?>
-            <link href="<?php echo$base_url;?>assets/location_capture_widget/css/location_capture_widget.css" rel="stylesheet" type="text/css">
-            <script src="<?php echo$base_url;?>assets/location_capture_widget/js/location_capture_widget.js" type="text/javascript"></script>
-
-        <?php elseif($lib=='ands_datetimepicker_widget'):?>
-            <link href="<?php echo$base_url;?>assets/datepicker_tz_widget/css/ands_datetimepicker.css" rel="stylesheet" type="text/css">
-            <script src="<?php echo$base_url;?>assets/datepicker_tz_widget/js/ands_datetimepicker.js" type="text/javascript"></script>
+            <link href="<?php echo apps_url('assets/location_capture_widget/css/location_capture_widget.css');?>" rel="stylesheet" type="text/css">
+            <script src="<?php echo apps_url('assets/location_capture_widget/js/location_capture_widget.js');?>" type="text/javascript"></script>
 
         <?php elseif($lib=='rosearch_widget'):?>
-            <link href="<?php echo$base_url;?>assets/registry_object_search/css/rosearch_widget.css" rel="stylesheet" type="text/css">
-            <script src="<?php echo$base_url;?>assets/registry_object_search/js/rosearch_widget.js" type="text/javascript"></script>
+            <link href="<?php echo apps_url('assets/registry_object_search/css/rosearch_widget.css');?>" rel="stylesheet" type="text/css">
+            <script src="<?php echo apps_url('assets/registry_object_search/js/rosearch_widget.js');?>" type="text/javascript"></script>
 
          <?php elseif($lib=='statistics'):?>
             <script src="<?php echo str_replace('/apps','/applications/apps',base_url());?>statistics/assets/js/statistics.js" type="text/javascript"></script>
