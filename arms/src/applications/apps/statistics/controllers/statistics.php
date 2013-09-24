@@ -304,6 +304,7 @@ function getCitationStatistics()
 							WHERE `record_data`.`data` LIKE '%citationMetadata%' 
 							AND `record_data`.`scheme` = 'rif' 
 							AND `record_data`.`current` = 'TRUE'
+							AND `registry_objects`.`status` = 'PUBLISHED'							
 							AND `record_data`.`registry_object_id` = `registry_objects`.`registry_object_id`
 							AND `registry_objects`.`class` = 'collection'
 							GROUP BY `registry_objects`.`data_source_id`");
@@ -318,6 +319,7 @@ function getCitationStatistics()
 							WHERE `record_data`.`data` LIKE '%fullCitation%' 
 							AND `record_data`.`scheme` = 'rif' 
 							AND `record_data`.`current` = 'TRUE'
+							AND `registry_objects`.`status` = 'PUBLISHED'							
 							AND `record_data`.`registry_object_id` = `registry_objects`.`registry_object_id`
 							AND `registry_objects`.`class` = 'collection'
 							GROUP BY `registry_objects`.`data_source_id`");
@@ -373,6 +375,121 @@ function getCitationStatistics()
 			$query = $statistics_db->query("UPDATE  `citations` SET `fullCitation_count` = ".$row->fullCitation_count." WHERE `data_source_id` = ".$row->data_source_id);
 		}	
 	}
+
+
+	function collectIdentifierStatistics()
+	{
+		$registry_db = $this->load->database('registry', TRUE);
+		$statistics_db = $this->load->database('statistics', TRUE);
+
+		$this->load->library('solr');
+		$query = $registry_db->query("SELECT  `data_sources`.`data_source_id`
+							FROM `dbs_registry`.`data_sources`; ");
+
+		foreach($query->result() as $key=>$row)
+		{
+			$timestamp = time();
+			$doi_identifiers = 0;
+			// use solr to get all identifiers of type doi for published collections
+			$this->solr->setOpt('q', '+data_source_id:("'.$row->data_source_id.'") AND +class:collection AND +identifier_type:doi AND +status:PUBLISHED');
+
+
+			$data['solr_result'] = $this->solr->executeSearch();
+			$this->solr->setOpt('start', 0);
+			$this->solr->setOpt('rows', 1);
+			$data['result'] = $this->solr->getResult();		
+			$data['numFound'] = $this->solr->getNumFound();
+			$doi_identifiers = $data['numFound'];
+		
+			// use solr to get all identifiers of type uri with a doi value for published collections
+			$this->solr->setOpt('q', '+data_source_id:("'.$row->data_source_id.'") AND +class:collection AND +identifier_type:uri AND +identifier_value:*doi.org* AND +status:PUBLISHED');	
+			$data['solr_result'] = $this->solr->executeSearch();
+			$this->solr->setOpt('start', 0);
+			$this->solr->setOpt('rows', 1);
+			$data['result'] = $this->solr->getResult();
+			$data['numFound'] = $this->solr->getNumFound();
+			$doi_identifiers = $doi_identifiers + $data['numFound'];
+
+
+			$orcid_identifiers = 0;	
+			// use solr to get all identifiers of type orcid for published parties
+			$this->solr->setOpt('q', '+data_source_id:("'.$row->data_source_id.'") AND +class:party AND +identifier_type:orcid AND +status:PUBLISHED');
+			$data['solr_result'] = $this->solr->executeSearch();
+			$this->solr->setOpt('start', 0);
+			$this->solr->setOpt('rows', 1);
+			$data['result'] = $this->solr->getResult();		
+			$data['numFound'] = $this->solr->getNumFound();
+			$orcid_identifiers = $data['numFound'];
+		
+			// use solr to get all identifiers of type uri with a doi value for published collections
+			$this->solr->setOpt('q', '+data_source_id:("'.$row->data_source_id.'") AND +class:party AND +identifier_type:uri AND +identifier_value:*orcid* AND +status:PUBLISHED');	
+			$data['solr_result'] = $this->solr->executeSearch();
+			$this->solr->setOpt('start', 0);
+			$this->solr->setOpt('rows', 1);
+			$data['result'] = $this->solr->getResult();
+			$data['numFound'] = $this->solr->getNumFound();
+			$orcid_identifiers = $orcid_identifiers + $data['numFound'];
+
+			$handle_identifiers = 0;
+			// use solr to get all identifiers of type handle for published collections
+			$this->solr->setOpt('q', '+data_source_id:("'.$row->data_source_id.'") AND +class:collection AND +identifier_type:handl* AND +status:PUBLISHED');
+			$data['solr_result'] = $this->solr->executeSearch();
+			$this->solr->setOpt('start', 0);
+			$this->solr->setOpt('rows', 3);
+			$data['result'] = $this->solr->getResult();		
+			$data['numFound'] = $this->solr->getNumFound();
+			$handle_identifiers = $data['numFound'];
+		
+			// use solr to get all identifiers of type uri with a doi value for published collections
+			$this->solr->setOpt('q', '+data_source_id:("'.$row->data_source_id.'") AND +class:party  AND +identifier_type:uri AND +identifier_value:*handle* AND +status:PUBLISHED');	
+			$data['solr_result'] = $this->solr->executeSearch();
+			$this->solr->setOpt('start', 0);
+			$this->solr->setOpt('rows', 3);
+			$data['result'] = $this->solr->getResult();
+			$data['numFound'] = $this->solr->getNumFound();
+			$handle_identifiers = $handle_identifiers + $data['numFound'];
+
+			$query = $statistics_db->query("INSERT INTO  `identifiers` (`data_source_id`,`doi`,`orcid`,`handle`,`timestamp`) VALUES (".$row->data_source_id.",".$doi_identifiers.", ".$orcid_identifiers.", ".$handle_identifiers.", ".$timestamp.")");
+		}
+
+	}
+
+	function collectRelationshipStatistics()
+	{
+
+		$registry_db = $this->load->database('registry', TRUE);
+		$statistics_db = $this->load->database('statistics', TRUE);
+
+		$collectionPartyRelationship = $registry_db->query("SELECT COUNT(DISTINCT(`registry_objects`.`registry_object_id`)) as collectionPartyCount, `registry_objects`.`data_source_id`
+			FROM `dbs_registry`.`registry_objects`, `dbs_registry`.`registry_object_relationships`
+			WHERE `registry_objects`.`status`='PUBLISHED' 
+			AND `registry_objects`.`class` = 'collection'
+			AND `registry_objects`.`registry_object_id` = `registry_object_relationships`.`registry_object_id`
+			AND `registry_object_relationships`.`related_object_class` = 'party'
+			AND `registry_object_relationships`.`origin` = 'EXPLICIT'
+			GROUP BY  `registry_objects`.`data_source_id`");
+
+		$timestamp = time();
+
+		foreach($collectionPartyRelationship->result() as $key=>$row)
+		{	
+			echo "Datasource ".$row->data_source_id." has ".$row->collectionPartyCount." collections with related party records<br/>";			
+		}
+
+
+		/*
+		SELECT `registry_objects`.`registry_object_id`, `registry_objects`.`data_source_id`, 
+		`registry_object_relationships`.`related_object_class`,`registry_object_relationships`.`related_object_key`
+		FROM `dbs_registry`.`registry_objects`, `dbs_registry`.`registry_object_relationships`
+		WHERE `registry_objects`.`status`='PUBLISHED' 
+		AND `registry_objects`.`class` = 'collection'
+		AND `registry_objects`.`registry_object_id` = `registry_object_relationships`.`registry_object_id`
+		AND `registry_object_relationships`.`related_object_class` = 'activity'
+		AND `registry_object_relationships`.`origin` = 'EXPLICIT'
+		AND `registry_object_relationships`.`related_object_key` LIKE 'http://purl.org/au-research/grants/arc/%';
+*/
+	}
+
 
 	// Initialise
 	function __construct()
