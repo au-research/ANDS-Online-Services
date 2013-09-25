@@ -144,7 +144,7 @@ else
 
                     <?php if (mod_enabled('pids') && $this->config->item('gPIDS_URL_PREFIX')): ?>
                       <li>
-                        <?php echo anchor(identifier_url('pids'), 'Identify My Data (PIDS)');?>
+                        <?php echo anchor(apps_url('pids'), 'Identify My Data (PIDS)');?>
                       </li>
                     <?php endif; ?>
 

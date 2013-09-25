@@ -10,7 +10,7 @@ $(document).on('click', '#mint_confirm', function(){
 	var url = $('#mint_form input[name=url]').val();
 	var desc = $('#mint_form input[name=desc]').val();
 	$.ajax({
-		url: base_url+'pids/mint',
+		url: apps_url+'pids/mint',
 		type: 'POST',
 		data: {url:url, desc:desc},
 		success: function(data){
@@ -26,7 +26,7 @@ $(document).on('click', '#mint_confirm', function(){
 	params['offset'] = $(this).attr('next_offset');
 	var button = $(this);
 	$.ajax({
-		url: base_url+'pids/list_pids', 
+		url: apps_url+'pids/list_pids', 
 		type: 'POST',
 		data: {params:params},
 		success: function(data){
@@ -68,7 +68,7 @@ function listPIDs(params) {
 		delete params['authDomain'];
 	}
 	$.ajax({
-		url: base_url+'pids/list_pids', 
+		url: apps_url+'pids/list_pids', 
 		type: 'POST',
 		data: {params:params},
 		success: function(data){

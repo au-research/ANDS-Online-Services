@@ -232,7 +232,7 @@ class Pids extends MX_Controller {
 			}
 		}
 
-		if(($offset + $limit) < $response['result_count']){
+		if(isset($response['result_count'])  && ($offset + $limit) < $response['result_count']){
 			$response['hasMore'] = true;
 			$response['next_offset'] = $offset + $limit;
 		}

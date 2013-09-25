@@ -25,7 +25,7 @@ $(document).on('click', '#update_confirm', function(){
 	var ok_to_reload = true;
 	$.each(jsonData['values'], function(){
 		$.ajax({
-			url:base_url+'pids/update_handle',
+			url:apps_url+'pids/update_handle',
 			async:true, 
 			type: 'POST',
 			data: {
@@ -71,11 +71,11 @@ $(document).on('click', '#update_confirm', function(){
 	jsonData['current'] = this_handle;
 	jsonData['reassign'] = new_handle;
 	$.ajax({
-		url:base_url+'pids/update_ownership/', 
+		url:apps_url+'pids/update_ownership/', 
 		type: 'POST',
 		data: {jsonData:jsonData},
 		success: function(data){
-			window.location = base_url+'pids';
+			window.location = apps_url+'pids';
 		}
 	});
 }).on('click', '.add_new', function(){
